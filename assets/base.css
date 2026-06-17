@@ -4,11 +4,13 @@
   --color-background: var(--color-base-background-1);
   --gradient-background: var(--gradient-base-background-1);
 }
+/*sarmin sultana*/
 .color-background-2 {
   --color-foreground: var(--color-base-text);
   --color-background: var(--color-base-background-2);
   --gradient-background: var(--gradient-base-background-2);
 }
+
 .color-inverse {
   --color-foreground: var(--color-base-background-1);
   --color-background: var(--color-base-text);
@@ -186,6 +188,7 @@
   --shadow-visible: var(--media-shadow-visible);
 }
 .no-js:not(html) {
+  display:block;
   display: none !important;
 }
 html.no-js .no-js:not(html) {
