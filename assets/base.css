@@ -188,8 +188,12 @@
   --shadow-visible: var(--media-shadow-visible);
 }
 .no-js:not(html) {
+<<<<<<< HEAD
   display:block;
   padding:0;
+=======
+  display:flex;
+>>>>>>> f7ba0b879a410d74ecfb71e0b65f5cd2174a6d3c
   display: none !important;
 }
 html.no-js .no-js:not(html) {
