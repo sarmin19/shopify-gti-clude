@@ -1,0 +1,215 @@
+{%- if section.settings.enable_quick_add -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign products_to_display = section.settings.carousel_collection.all_products_count
+
+  if section.settings.carousel_collection.all_products_count > section.settings.number_of_products
+    assign products_to_display = section.settings.number_of_products
+    assign more_in_collection = true
+  endif
+
+-%}
+
+<div class="featured_carousel_section grid_display">
+  <div class="featured_carousel page-width">
+     <div class="featured_header">
+<div class="f_heading">
+  <h2>{{ section.settings.featured_carousel_heading }}</h2>
+  <p>{{ section.settings.featured_carousel_sub }}</p>
+</div>    
+  </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.7.2/flexslider.min.css" integrity="sha512-c7jR/kCnu09ZrAKsWXsI/x9HCO9kkpHw4Ftqhofqs+I2hNxalK5RGwo/IAhW3iqCHIw55wBSSCFlm8JP0sw2Zw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.7.2/jquery.flexslider-min.js" integrity="sha512-BmoWLYENsSaAfQfHszJM7cLiy9Ml4I0n1YtBQKfx8PaYpZ3SoTXfj3YiDNn0GAdveOCNbK8WqQQYaSb0CMjTHQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    
+<div class="flexslider">
+  <ul class="slides">
+        {%- for product in section.settings.carousel_collection.products limit: section.settings.products_to_show -%}
+          <li>
+           {% render 'card-product',
+              card_product: product,
+              media_aspect_ratio: section.settings.image_ratio,
+              show_secondary_image: section.settings.show_secondary_image,
+              show_vendor: section.settings.show_vendor,
+              show_rating: section.settings.show_rating,
+              show_quick_add: section.settings.enable_quick_add,
+              section_id: section.id
+            %}
+            </li>
+          {% endfor %}
+  </ul>
+      </div>
+
+  </div>
+  
+</div>
+
+<script>
+  
+  $(document).ready(function() {
+    var getGridSize = function() {
+  return (window.innerWidth < 600) ? 1 :
+         (window.innerWidth < 900) ? 2 : 4;
+}
+    
+  $('.flexslider').flexslider({
+    animation: "slide",
+    animationLoop: true,
+    itemWidth: 255,
+     minItems: getGridSize(), // use function to pull in initial value
+    maxItems: getGridSize(),
+    autoloop: false,
+    itemMargin: 20,
+    controlNav: false
+  });
+});
+</script>
+
+
+    <style>
+
+      .flex-direction-nav a:before {
+    font-family: flexslider-icon;
+    font-size: 20px;
+    display: inline-block;
+    content: '\f001';
+    color: black;
+    text-shadow: 3px 1px 0 rgba(255,255,255,.3);
+    background: transparent;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    border-radius: 50%;
+    border: 3px solid black;
+}
+      .featured_header {
+    text-align: center;
+}    
+      .featured_header h2{
+    margin-bottom:0px;
+}
+      .f_heading p {
+    margin-top: 5px;
+}
+    </style>
+
+
+
+{% schema %}
+  {
+    "name": "Featured-product-carousel",
+    "settings": [
+      
+      {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": false,
+      "label": "Full width display"
+    },
+      {
+      "type": "collection",
+      "id": "carousel_collection",
+      "label": "t:sections.featured-collection.settings.collection.label"
+    },
+      
+    {
+      "type": "text",
+      "id": "featured_carousel_heading",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "text",
+      "id": "featured_carousel_sub",
+      "label": "Sub heading",
+      "default": "High Quality products are available now"
+    },
+        {
+      "type": "range",
+      "id": "number_of_products",
+      "min": 2,
+      "max": 25,
+      "step": 1,
+      "default": 4,
+      "label": "Number of products"
+    },
+      {
+      "type": "header",
+      "content": "t:sections.featured-collection.settings.header.content"
+    },
+    {
+      "type": "select",
+      "id": "f_image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.featured-collection.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.featured-collection.settings.image_ratio.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "f_show_secondary_image",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "f_show_vendor",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "f_show_rating",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.show_rating.label",
+      "info": "t:sections.featured-collection.settings.show_rating.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "f_enable_quick_add",
+      "default": false,
+      "label": "t:sections.featured-collection.settings.enable_quick_buy.label"
+    }
+    ],
+     "presets": [
+    {
+      "name": "Featured-product-carousel"
+    }
+  ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
